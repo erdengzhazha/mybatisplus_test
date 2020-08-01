@@ -15,7 +15,7 @@ public class Test {
     private int id;
     @TableField("name")
     private String name;
-    @TableField("creatTime")
+    @TableField("createTime")
     private Date creatTime;
 
 

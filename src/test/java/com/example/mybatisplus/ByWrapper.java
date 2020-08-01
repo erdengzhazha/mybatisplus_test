@@ -2,7 +2,9 @@ package com.example.mybatisplus;
 
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.mybatisplus.mapper.TestMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,22 +59,35 @@ public class ByWrapper {
 
         //查询返回的是一个统计结果 ，
         //统计id为多少
-        testQueryWrapper.select("sum(id) sumid,avg(id) avid").groupBy("id").having("sum(id)>{0}",3);
-
-        List<Map<String, Object>> maps = testMapper.selectMaps(testQueryWrapper);
-
-        System.out.println("总共机"+maps.size());
-        for (Map<String,Object> t:
-            maps) {
-            System.out.println(t.get("sumid")+" "+t.get("avid"));
-        }
+//        testQueryWrapper.select("sum(id) sumid,avg(id) avid").groupBy("id").having("sum(id)>{0}",3);
+//
+//        List<Map<String, Object>> maps = testMapper.selectMaps(testQueryWrapper);
+//
+//        System.out.println("总共机"+maps.size());
+//        for (Map<String,Object> t:
+//            maps) {
+//            System.out.println(t.get("sumid")+" "+t.get("avid"));
+//        }
         //langbuda 的写法
-//        List<com.example.mybatisplus.domain.Test> test = new LambdaQueryChainWrapper<com.example.mybatisplus.domain.Test>(testMapper)
+//        List<com.example.mybatisplus.domain.Test> test =
+//        new LambdaQueryChainWrapper<com.example.mybatisplus.domain.Test>(testMapper)
 //                .like(com.example.mybatisplus.domain.Test::getName, "测试")
 //                .list();
 //        for (com.example.mybatisplus.domain.Test t:
 //             test) {
 //            System.out.println(t.getId() + " "+t.getName()+ ""+t.getCreatTime());
 //        }
+        Page<com.example.mybatisplus.domain.Test> testPage = new Page<>(1, 1);
+        testQueryWrapper.like("name","小").lt("id",5);
+        Page<com.example.mybatisplus.domain.Test> testPage1 = testMapper.selectPage(testPage, testQueryWrapper);
+
+        System.out.println("总页数"+testPage1.getPages());
+        System.out.println("总记录书"+testPage1.getTotal());
+        List<com.example.mybatisplus.domain.Test> orders = testPage1.getRecords();
+        for (com.example.mybatisplus.domain.Test t:
+             orders) {
+            System.out.println(t.getId() + " "+t.getName()+ ""+t.getCreatTime());
+        }
+
     }
 }
