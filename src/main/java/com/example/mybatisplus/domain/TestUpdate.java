@@ -1,6 +1,7 @@
 package com.example.mybatisplus.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
@@ -14,6 +15,10 @@ public class TestUpdate {
     private String name;
     @TableField("createTime")
     private Date createTime;
+
+    //逻辑删除字段标识(0未删除,1已删除)
+    @TableLogic
+    private Integer deleted;
 
     public TestUpdate() {
     }
